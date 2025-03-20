@@ -25,16 +25,25 @@ class TarefaController {
     } catch (error) {
       console.error(error);
       res.status(500).json({ erro: "Erro ao criar tarefa" });
-    };
-  }
+    }
+  };
+  update = async (req, res) => {
+    const {id} = req.params;
+    const { concluida, descrica } = req.body;
 
-    update = ({ params: { id }, body: { concluida } }, res) => {
-      const tarefaAtualizada = tarefaModel.update(id, concluida);
+    try {
+      const tarefaAtualizada = await tarefaModel.update(Number(id), concluida, descricao);
+
       if (!tarefaAtualizada) {
         return res.status(404).json({ erro: "Tarefa não encontrada" });
       }
+
       res.json(tarefaAtualizada);
-    };
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ erro: "Erro ao atualizar tarefa" });
+    }
+  };
 
     delete = ({ params: { id } }, res) => {
       const sucesso = tarefaModel.delete(id);
